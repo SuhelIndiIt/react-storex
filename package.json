@@ -1,0 +1,18 @@
+{
+  "name": "react-storex",
+  "version": "1.0.2",
+  "description": "Custom React Native store solution with hooks, caching, pagination, and JWT integration",
+  "keywords": [
+    "react-native",
+    "react",
+    "store",
+    "state-management"
+  ],
+  "license": "ISC",
+  "author": "Indi-it",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
