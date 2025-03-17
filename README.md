@@ -1,6 +1,6 @@
 # react-storex
 
-> A React state management library with integrated API handling, automatic caching, and CRUD operations. Designed to simplify global state management with built-in data synchronization capabilities.
+> A React / React Native state management library with integrated API handling, automatic caching, and CRUD operations. Designed to simplify global state management with built-in data synchronization capabilities.
 
 ## Features
 
@@ -87,10 +87,6 @@ import { useStore } from "react-storex";
  * @param {Object} [params.payload=null] - The data payload for POST/PUT requests
  * @param {string|number} [params.itemId=null] - ID of specific item to fetch/update
  * @returns {Object} Returns an object containing:
- *   - state: Current state data
- *   - isLoading: Boolean indicating if request is in progress
- *   - isError: Error object if request failed, null otherwise
- *   - executeMutation: Function to trigger POST/PUT requests with payload
  */
 
 const ItemsList = () => {

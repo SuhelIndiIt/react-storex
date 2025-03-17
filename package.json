@@ -1,6 +1,6 @@
 {
   "name": "react-storex",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Custom React Native store solution with hooks, caching, pagination, and JWT integration",
   "keywords": [
     "react-native",
@@ -8,10 +8,18 @@
     "store",
     "state-management"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SuhelIndiIt/react-storex.git"
+  },
   "license": "ISC",
   "author": "Indi-it",
   "type": "commonjs",
   "main": "index.js",
+  "bugs": {
+    "url": "https://github.com/SuhelIndiIt/react-storex/issues"
+  },
+  "homepage": "https://github.com/SuhelIndiIt/react-storex#readme",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   }
