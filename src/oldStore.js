@@ -55,33 +55,6 @@ class Store {
   };
 
   /**
-   * Updates a specific item in the store array
-   * @param {string} key - The store key for the array
-   * @param {string | number} itemId - ID of the item to update
-   * @param {Object} updatedData - New data to update the item with
-   * @returns {Promise<Object | null>} Updated item or null if not found
-   */
-  updateItemInStore = (key, itemId, updatedData) => {
-    try {
-      if (!this.state[key] || !Array.isArray(this.state[key])) {
-        console.error(`No valid array found in store for key: ${key}`);
-        return { status: false };
-      }
-
-      const updatedItems = this.state[key].map((item) =>
-        String(item.id) === String(itemId) ? { ...item, ...updatedData } : item
-      );
-
-      this.setState({ [key]: updatedItems });
-      this.cache.set(key, updatedItems);
-
-      return { status: true };
-    } catch (error) {
-      return { status: false };
-    }
-  };
-
-  /**
    * clearCache method to clear the cache
    * @param {string} key - The key to clear the cache for
    */
@@ -141,7 +114,7 @@ class Store {
     method = "GET",
     payload = null,
     urlPath,
-    keepCache
+    keepCache = true
   ) => {
     const now = Date.now();
 
@@ -172,8 +145,10 @@ class Store {
       }
 
       if (data) {
-        this.cache.set(key, data);
-        this.cacheExpiration.set(key, now);
+        if (keepCache) {
+          this.cache.set(key, data);
+          this.cacheExpiration.set(key, now);
+        }
         this.setState({ [key]: data });
       }
 
@@ -198,17 +173,6 @@ export const createStore = (initialState) => {
 };
 
 /**
- * Updates a specific item in the store array
- * @param {string} key - The store key for the array
- * @param {string | number} itemId - ID of the item to update
- * @param {Object} updatedData - New data to update the item with
- * @returns {Promise<Object | null>} Updated item or null if not found
- */
-export const updateItemInStore = (key, itemId, updatedData) => {
-  return store.updateItemInStore(key, itemId, updatedData);
-};
-
-/**
  * Custom hook for managing store state and API interactions
  * @param {Object} params - The parameters object
  * @param {string} params.key - The store key to fetch/update data
@@ -228,7 +192,8 @@ export const useStore = ({
   payload = null,
   itemId = null,
   urlPath = "",
-  keepCache = false,
+  keepCache = true,
+  idKey = "id", // new parameter
 }) => {
   const [state, setState] = useState(() => {
     const data = store.getState()[key];
@@ -251,10 +216,6 @@ export const useStore = ({
     const previousState = state;
 
     try {
-      //   if (method === "POST" || method === "PUT") {
-      //     setState({ ...state, ...payload });
-      //   }
-
       const data = await store.fetchData(
         key,
         method,
@@ -339,12 +300,14 @@ export const useStore = ({
    * Deletes an item locally from the store
    * @param {string | number} deleteItemId - ID of the item to delete
    */
+
   const deleteItem = (deleteItemId) => {
     if (!deleteItemId) return;
     const updatedData =
       store
         .getState()
-        [key]?.filter((item) => String(item.id) !== String(deleteItemId)) || [];
+        [key]?.filter((item) => String(item[idKey]) !== String(deleteItemId)) ||
+      [];
     store.setState({ [key]: updatedData });
   };
 
@@ -362,7 +325,7 @@ export const useStore = ({
       }
 
       const updatedItems = store.state[key].map((item) =>
-        String(item.id) === String(editItemId)
+        String(item[idKey]) === String(editItemId)
           ? { ...item, ...updatedFields }
           : item
       );
